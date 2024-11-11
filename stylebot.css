@@ -1,0 +1,233 @@
+:root {
+    --html-bg: #FFF1E9;
+    --css-bg: #E0FDEF;
+    --js-bg: #EBF0FF;
+    --accessibility-bg: #F6E7FF;
+    --text-color: #313E51; /* Light text color */
+    --text-color-p: #626C7F;
+    --purple: #A729F5;
+    --bg-col: white;
+    --button-bg: white;
+    --option-bg: #F4F6FA;
+    --option-color: #626C7F;
+    --correct-color: #26D782;
+    --invalid-color: #EE5454;
+    --bg: url("./assets/images/pattern-background-mobile-light.svg");
+    --sun-src: url("./assets/images/icon-sun-dark.svg");
+    --moon-src: url("./assets/images/icon-moon-dark.svg");
+}
+
+[data-theme="dark"] {
+    --text-color: #040000;  /* Dark mode text color */
+    --text-color-p: #ABC1E1;
+    --bg-col: #313E51;
+    --button-bg: #3B4D66;
+    --bg: url("./assets/images/pattern-background-mobile-dark.svg");
+    --sun-src: url("./assets/images/icon-sun-light.svg");
+    --moon-src: url("./assets/images/icon-moon-light.svg");
+}
+
+/* Reset Styles */
+html {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    background-color: var(--bg-col);
+    background-image: var(--bg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-color);  /* Apply text color for the body */
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+* {
+    margin: 0;
+}
+
+img,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+button {
+    font: inherit;
+}
+
+/* Light/Dark Toggle Styles */
+.light-dark-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 20px;
+}
+
+.light-dark-switch {
+    display: inline-block;
+    position: relative;
+    width: 3rem;
+    height: 1.75rem;
+}
+
+.light-dark-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: var(--purple);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.slider:before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+input:checked + .slider:before {
+    transform: translateX(1.25rem);
+}
+
+.slider.round {
+    border-radius: 50rem;
+}
+
+/* Chatbot Interface Styles */
+.chatbot-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chatbot-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-header h1 {
+    font-size: 2rem;
+    color: var(--text-color);  /* Apply text color for the header */
+}
+
+.chatbot-header .light-dark-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.chat-display {
+    width: 100%;
+    height: 300px;
+    overflow-y: scroll;
+    margin-top: 20px;
+    padding: 10px;
+    background: var(--bg-col);
+    border-radius: 10px;
+    box-shadow: 0px 16px 40px 0px rgba(143, 160, 193, 0.14);
+    color: var(--text-color);  /* Apply text color to chat display */
+}
+
+.bot-message, .user-message {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.bot-message .message-content, .user-message .message-content {
+    background-color: var(--option-bg);
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 1rem;
+    color: var(--text-color);  /* Apply text color to messages */
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.user-message .message-content {
+    background-color: var(--purple);
+    color: white;
+}
+
+.chat-input-form {
+    display: flex;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.chat-input-form input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 2px solid var(--option-bg);
+    border-radius: 20px;
+    font-size: 1rem;
+    color: var(--text-color);  /* Apply text color to input */
+}
+
+.chat-input-form button {
+    background-color: var(--purple);
+    color: white;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.chat-input-form button:hover {
+    background-color: #8b1fe2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chatbot-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .chatbot-header h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .chatbot-container {
+        padding: 20px;
+    }
+}
+
+
