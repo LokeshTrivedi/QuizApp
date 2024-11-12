@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot Interface</title>
     <link rel="stylesheet" href="stylebot.css">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
-
 <body>
-    <!-- Back Button (Above Chatbot) -->
-    <button id="back-button" class="back-button">Back</button>
+    <!-- Back Button -->
+    <button onclick="goBack()" class="back-button">Back</button>
 
     <!-- Main container -->
     <div class="chatbot-container">
@@ -33,25 +31,90 @@
         </header>
 
         <!-- Chat Display Section -->
-        <main class="chat-display" id="chat-display">
-            <div class="bot-message">
-                <div class="message-content">Hello! I'm here to assist you. How can I help?</div>
-            </div>
-        </main>
+        <main class="chat-display" id="chat-display"></main>
 
         <!-- User Input Section -->
         <form class="chat-input-form" id="chat-form">
-            <input type="text" id="user-input" placeholder="Type your message here..." required>
+            <input type="text" id="user-input" placeholder="Type your option (e.g., 1) or 0 for menu..." required>
             <button type="submit" class="send-button">Send</button>
         </form>
     </div>
 
-    <!-- JavaScript to Handle Theme Toggle, Chat, and Back Button -->
     <script>
+        const questions = [
+            "1. What is responsive design, and why is it important?",
+            "2. What is the purpose of Git in web development?",
+            "3. Explain the difference between frontend and backend development.",
+            "4. What is the Document Object Model (DOM)?",
+            "5. What is Bootstrap used for?",
+            "6. What is the difference between HTTP and HTTPS?",
+            "7. What is an API, and how is it used in web development?",
+            "8. What is a CSS preprocessor, and can you name one?",
+            "9. What are the three main components of a web page structure?",
+            "10. Explain the use of a framework like React or Angular."
+        ];
+
+        const answers = [
+            "Responsive design makes web content look good on all devices. It’s important for accessibility and user experience.",
+            "Git is a version control system used to manage and track changes in code projects.",
+            "Frontend development focuses on the user interface, while backend development handles the server and database logic.",
+            "The DOM is a programming interface that allows scripts to update the content, structure, and style of a document.",
+            "Bootstrap is a CSS framework that helps design responsive and mobile-first websites quickly.",
+            "HTTP is unsecured, while HTTPS includes SSL/TLS for secure communication over the internet.",
+            "An API allows different software systems to communicate, often used to connect frontend and backend services.",
+            "A CSS preprocessor is a scripting language that extends CSS, like SASS or LESS, adding features like variables and nesting.",
+            "The three main components are HTML (structure), CSS (style), and JavaScript (behavior).",
+            "Frameworks like React and Angular help create dynamic, single-page applications by managing UI and state efficiently."
+        ];
+
+        const chatDisplay = document.getElementById("chat-display");
+
         // Back button functionality
-        const backButton = document.getElementById("back-button");
-        backButton.addEventListener("click", () => {
-            window.history.back();  // Navigate back to the previous page
+        function goBack() {
+            window.history.back();
+        }
+
+        // Function to create a new message
+        function createMessage(content, isBot = true) {
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add(isBot ? "bot-message" : "user-message");
+            messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+            chatDisplay.appendChild(messageDiv);
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+
+        // Display main menu with questions
+        function displayMainMenu() {
+            chatDisplay.innerHTML = "";  // Clear previous chat content
+            createMessage("Hello! Welcome to the Chatbot. Please choose a question to get the answer:");
+            questions.forEach(question => createMessage(question, true));
+            createMessage("Type the option number (1-10) to get the answer, or 0 to return to the main menu at any time.");
+        }
+
+        // Show main menu on page load
+        displayMainMenu();
+
+        // Handle form submission
+        document.getElementById("chat-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const userInput = document.getElementById("user-input").value.trim();
+
+            // If input is 0, go back to main menu
+            if (userInput === "0" || userInput === "00") {
+                displayMainMenu();
+            }
+            // Validate if the input is a single digit between 1 and 10
+            else if (/^[1-9]$|^10$/.test(userInput)) {
+                const index = parseInt(userInput) - 1;
+                chatDisplay.innerHTML = "";  // Clear chat for a clean view of question and answer
+                createMessage(questions[index], false);  // Display selected question
+                createMessage(answers[index]);  // Display corresponding answer
+                createMessage("Type 0 to return to the main menu.");
+            } else {
+                createMessage("Invalid input. Please select a single option from 1 to 10, or type 0 to go back to the main menu.");
+            }
+
+            document.getElementById("user-input").value = "";  // Clear user input
         });
 
         // Theme toggle functionality
@@ -63,60 +126,6 @@
                 document.documentElement.removeAttribute("data-theme");
             }
         });
-
-        // Function to create a new message
-        function createMessage(content, isBot = true) {
-            const messageDiv = document.createElement("div");
-            messageDiv.classList.add(isBot ? "bot-message" : "user-message");
-            messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
-            chatDisplay.appendChild(messageDiv);
-            chatDisplay.scrollTop = chatDisplay.scrollHeight;
-        }
-
-        // Send message to OpenAI's ChatGPT and get response
-        async function sendToChatGPT(message) {
-            const response = await fetch('https://api.openai.com/v1/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer YOUR_API_KEY_HERE`,  // Replace with your API key
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5",  // You can use gpt-3.5 or gpt-4 depending on your plan
-                    messages: [{ role: "user", content: message }],
-                    max_tokens: 150, // Adjust token length according to your needs
-                    temperature: 0.7, // Controls the creativity of the response (range 0-1)
-                })
-            });
-
-            const data = await response.json();
-            const botReply = data.choices[0].message.content.trim(); // Bot's response
-            return botReply;
-        }
-
-        // Chat form submission handler
-        const chatForm = document.getElementById("chat-form");
-        const chatDisplay = document.getElementById("chat-display");
-
-        chatForm.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            const userInput = document.getElementById("user-input").value.trim();
-
-            if (userInput) {
-                // Display user message
-                createMessage(userInput, false);
-
-                // Send the user input to OpenAI's ChatGPT and get the response
-                const botResponse = await sendToChatGPT(userInput);
-
-                // Display the bot's response
-                createMessage(botResponse);
-
-                // Clear user input
-                document.getElementById("user-input").value = "";
-            }
-        });
     </script>
 </body>
-
 </html>
