@@ -203,6 +203,7 @@ input:checked + .slider:before {
     color: white;
     padding: 10px 20px;
     margin-left: 10px;
+    /* margin-right: 80px; */
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -219,7 +220,7 @@ input:checked + .slider:before {
     border: none;
     padding: 10px 20px;
     font-size: 16px;
-    width: 5%;
+    /* width: 5%; */
     border-radius: 5px;
     cursor: pointer;
     position: fixed; /* Make it fixed at the top */
