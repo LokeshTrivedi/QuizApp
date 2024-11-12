@@ -6,9 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot Interface</title>
     <link rel="stylesheet" href="stylebot.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!-- Back Button (Above Chatbot) -->
+    <button id="back-button" class="back-button">Back</button>
+
     <!-- Main container -->
     <div class="chatbot-container">
         <!-- Header Section -->
@@ -42,8 +46,14 @@
         </form>
     </div>
 
-    <!-- JavaScript to Handle Theme Toggle and Chat -->
-    <!-- <script>
+    <!-- JavaScript to Handle Theme Toggle, Chat, and Back Button -->
+    <script>
+        // Back button functionality
+        const backButton = document.getElementById("back-button");
+        backButton.addEventListener("click", () => {
+            window.history.back();  // Navigate back to the previous page
+        });
+
         // Theme toggle functionality
         const themeToggle = document.getElementById("theme-toggle");
         themeToggle.addEventListener("change", () => {
@@ -69,10 +79,10 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer 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`,
+                    'Authorization': `Bearer YOUR_API_KEY_HERE`,  // Replace with your API key
                 },
                 body: JSON.stringify({
-                    model: "gpt-3.5", // You can use gpt-3.5 or gpt-4 depending on your plan
+                    model: "gpt-3.5",  // You can use gpt-3.5 or gpt-4 depending on your plan
                     messages: [{ role: "user", content: message }],
                     max_tokens: 150, // Adjust token length according to your needs
                     temperature: 0.7, // Controls the creativity of the response (range 0-1)
@@ -106,158 +116,7 @@
                 document.getElementById("user-input").value = "";
             }
         });
-    </script> -->
-
-
-    <!-- <script>
-        // Function to handle the theme toggle
-        const themeToggle = document.getElementById("theme-toggle");
-        themeToggle.addEventListener("change", () => {
-            if (themeToggle.checked) {
-                document.documentElement.setAttribute("data-theme", "dark");
-            } else {
-                document.documentElement.removeAttribute("data-theme");
-            }
-        });
-
-        // Function to send the user message and get the chatbot response
-        const chatForm = document.getElementById("chat-form");
-        const chatDisplay = document.getElementById("chat-display");
-
-        chatForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const userInput = document.getElementById("user-input").value.trim();
-
-            if (userInput) {
-                // Display user message
-                const userMessage = document.createElement("div");
-                userMessage.classList.add("user-message");
-                userMessage.innerHTML = `<div class="message-content">${userInput}</div>`;
-                chatDisplay.appendChild(userMessage);
-
-                // Display bot processing message
-                const botMessage = document.createElement("div");
-                botMessage.classList.add("bot-message");
-                botMessage.innerHTML = `<div class="message-content">Processing your request...</div>`;
-                chatDisplay.appendChild(botMessage);
-
-                // Scroll to the bottom
-                chatDisplay.scrollTop = chatDisplay.scrollHeight;
-
-                // Send request to OpenAI API
-                const response = await getBotResponse(userInput);
-
-                // Remove processing message and display bot's reply
-                chatDisplay.removeChild(botMessage);
-
-                const newBotMessage = document.createElement("div");
-                newBotMessage.classList.add("bot-message");
-                newBotMessage.innerHTML = `<div class="message-content">${response}</div>`;
-                chatDisplay.appendChild(newBotMessage);
-
-                // Clear user input
-                document.getElementById("user-input").value = "";
-            }
-        });
-
-        async function getBotResponse(userInput) {
-            const apiKey = "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";  // Replace with your API key
-            const endpoint = "https://api.openai.com/v1/completions";
-            const model = "text-davinci-003";  // Use the model you prefer
-
-            const headers = {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${apiKey}`
-            };
-
-            const requestData = {
-                model: model,
-                prompt: userInput,
-                max_tokens: 150
-            };
-
-            try {
-                const response = await fetch(endpoint, {
-                    method: "POST",
-                    headers: headers,
-                    body: JSON.stringify(requestData)
-                });
-
-                const data = await response.json();
-                return data.choices[0].text.trim();  // Extract the bot's message from response
-            } catch (error) {
-                console.error("Error:", error);
-                return "Sorry, there was an error processing your request.";
-            }
-        }
-    </script> -->
-
-    <script>
-        // Function to handle the theme toggle
-        const themeToggle = document.getElementById("theme-toggle");
-        themeToggle.addEventListener("change", () => {
-            if (themeToggle.checked) {
-                document.documentElement.setAttribute("data-theme", "dark");
-            } else {
-                document.documentElement.removeAttribute("data-theme");
-            }
-        });
-    
-        // Function to send the user message and get the chatbot response
-        const chatForm = document.getElementById("chat-form");
-        const chatDisplay = document.getElementById("chat-display");
-    
-        chatForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const userInput = document.getElementById("user-input").value.trim();
-    
-            if (userInput) {
-                // Display user message
-                const userMessage = document.createElement("div");
-                userMessage.classList.add("user-message");
-                userMessage.innerHTML = `<div class="message-content">${userInput}</div>`;
-                chatDisplay.appendChild(userMessage);
-    
-                // Display bot processing message
-                const botMessage = document.createElement("div");
-                botMessage.classList.add("bot-message");
-                botMessage.innerHTML = `<div class="message-content">Processing your request...</div>`;
-                chatDisplay.appendChild(botMessage);
-    
-                // Scroll to the bottom
-                chatDisplay.scrollTop = chatDisplay.scrollHeight;
-    
-                // Send request to your Node.js backend (which will call OpenAI)
-                const response = await getBotResponse(userInput);
-    
-                // Remove processing message and display bot's reply
-                chatDisplay.removeChild(botMessage);
-    
-                const newBotMessage = document.createElement("div");
-                newBotMessage.classList.add("bot-message");
-                newBotMessage.innerHTML = `<div class="message-content">${response}</div>`;
-                chatDisplay.appendChild(newBotMessage);
-    
-                // Clear user input
-                document.getElementById("user-input").value = "";
-            }
-        });
-    
-        async function getBotResponse(userInput) {
-            const response = await fetch("http://localhost:3000/chat", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ userInput })
-            });
-    
-            const data = await response.json();
-            return data.botResponse;
-        }
     </script>
-    
-
 </body>
 
 </html>
